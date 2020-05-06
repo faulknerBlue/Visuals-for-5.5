@@ -8,22 +8,30 @@ eTriangle b1;
 eTriangle b2;
 
 //array of particles
-Particle[] star = new Particle[30];
+Particle[] star = new Particle[50];
 
 color o = color(250,109,206);
 
 void setup(){
   size(500,500);
   //init particles
-  for( int i = 0; i < 30; i++){
-    star[i] = new Particle(i, i);
+  for( int i = 0; i < 50; i++){
+    star[i] = new Particle(int(random(width)), int(random(height)));
   }
 }
 
 void draw() {
   background(0);
-  for( int i = 0; i < 30; i++){
-    star[i].force(0,1);
+  for( int i = 0; i < 50; i++){
+    //"gravitational" force
+    PVector p = new PVector(-.5, -.5);
+    
+    //move toward the center
+    if(star[i].location.x < width/2) p.x *= -1;
+    if(star[i].location.y < width/2) p.y *= -1;
+    
+    star[i].mass = i;
+    star[i].force(p);
     star[i].update();
     star[i].edges();
     star[i].display();
@@ -46,24 +54,24 @@ void draw() {
   pushMatrix();
     rotate(radians(10 * sin(millis() / 325.0 )));
     
-    b1 = new eTriangle(0, 0, -145, 0, color(255,255,92), true);
+    b1 = new eTriangle(0, 0, -140, 0, color(255,255,92), true);
     b1.display();
   popMatrix();
   
   pushMatrix();
     rotate(radians(10 * sin(millis() / 350.0 )));
     
-    b2 = new eTriangle(0, 0, -150, 0, color(118,250,239), true);
+    b2 = new eTriangle(0, 0, -140, 0, color(118,250,239), true);
     b2.display();
   popMatrix();
   
   
   //central triangles
   color a = #F084F8;
-  t = new eTriangle(0, 0, -100, a, 0, false);
+  t = new eTriangle(0, 0, -90, a, 0, false);
   t.display();
   
-  s = new eTriangle(0, 0, -70, color(212,106,210, 50), 0, false);
+  s = new eTriangle(0, 0, -65, color(212,106,210, 50), 0, false);
   s.display();
   
   

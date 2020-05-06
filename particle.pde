@@ -2,33 +2,37 @@ class Particle{
   PVector location;
   PVector velocity;
   PVector acceleration;
+  float mass;
   
   Particle() {
-    location = new PVector(width/2,height/2);
+    location = new PVector(250,250);
     velocity = new PVector(0,0);
     acceleration = new PVector(0,0);
+    
   }
   
   Particle(int lx, int ly) {
     location = new PVector(lx,ly);
     velocity = new PVector(0,0);
     acceleration = new PVector(0,0);
+    mass = 1.0;
   }
   
-  void force(int x, int y){
+  void force(PVector force){
     //want this to be a vector we can give to the particles!
-  // acceleration = new PVector(x, y);
+    PVector f = PVector.div(force,mass);
+    acceleration.add(f);
     
-    //for now is random
-    acceleration = acceleration.random2D();
+
   }
   
   //acceleration changes velocity. 
   void update() {
-    
     velocity.add(acceleration);
     location.add(velocity);
-    
+    acceleration.mult(0);
+
+
     //PVector limits function down to specified value
     velocity.limit(10);
   }
@@ -36,16 +40,30 @@ class Particle{
   
   //this is jank
   void edges() {
-    if (location.x > width)   location.x = width;
-    if (location.x < 0)         location.x = 0;
-    if (location.y > height)  location.y = height;
-    if (location.y < 0)         location.y = 0;
+    if (location.x > width) {
+      location.x = width;
+      velocity.x *= -1;
+    } 
+    else if (location.x < 0) {
+      velocity.x *= -1;
+      location.x = 0;
+    }
+
+    if (location.y > height) {
+      velocity.y *= -1;
+      location.y = height;
+    }
+    else if (location.y < 0) {
+      velocity.y *= -1;
+      location.y = 0;
+    }
+    
   }
   
   void display() {
     noStroke();
     fill(255);
-    ellipse(location.x, location.y, 5, 5);
+    ellipse(location.x, location.y, 4, 4);
     
   }
   
