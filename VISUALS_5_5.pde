@@ -7,15 +7,31 @@ eTriangle b;
 eTriangle b1;
 eTriangle b2;
 
+//array of particles
+Particle[] star = new Particle[30];
+
 color o = color(250,109,206);
 
 void setup(){
   size(500,500);
+  //init particles
+  for( int i = 0; i < 30; i++){
+    star[i] = new Particle(i, i);
+  }
 }
 
 void draw() {
-  translate(width/2, height/2);
   background(0);
+  for( int i = 0; i < 30; i++){
+    star[i].force(0,1);
+    star[i].update();
+    star[i].edges();
+    star[i].display();
+    
+  }
+  
+  translate(width/2, height/2);
+  
   
   //surrounding triangles
   pushMatrix();
@@ -49,6 +65,9 @@ void draw() {
   
   s = new eTriangle(0, 0, -70, color(212,106,210, 50), 0, false);
   s.display();
+  
+  
+ 
   
   
   
