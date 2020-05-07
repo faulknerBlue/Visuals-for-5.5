@@ -15,7 +15,7 @@ class Particle{
     location = new PVector(lx,ly);
     velocity = new PVector(0,0);
     acceleration = new PVector(0,0);
-    mass = 1.0;
+    mass = random(1,2);
   }
   
   void force(PVector force){
