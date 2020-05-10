@@ -34,7 +34,10 @@ class eTriangle{
     stroke(str);
     strokeWeight(strW);
     noFill();
-    
+   
+   pushMatrix();
+    scale(mS); 
+      
     
     beginShape();
 
@@ -74,7 +77,8 @@ class eTriangle{
       }
 
     endShape(CLOSE);
-
+     
+     popMatrix();
 
   }
   

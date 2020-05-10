@@ -1,3 +1,9 @@
+import netP5.*;
+import oscP5.*;
+
+OscP5 oscP5;
+NetAddress remoteAddress;
+
 //central triangles
 eTriangle t;
 eTriangle s; 
@@ -26,7 +32,9 @@ float yoff2 = 0.0;
 float xoff3 = 0.0;
 float yoff3 = 0.0;
 
-
+float mS = 1.0;
+float mR = 1.0;
+float mG = 0.0;
 
 
 void setup(){
@@ -49,13 +57,16 @@ void setup(){
     xoff1[i] = random(0,1);
     yoff1[i] = random(0,1);
   }
+  
+  OscP5 osc = new OscP5(this, 12000);
 }
 
 void draw() {
   background(0);
+  
   for( int i = 0; i < 50; i++){
     //"gravitational" force
-    PVector p = new PVector(-.5, -.5);
+    PVector p = new PVector(mG, mG);
     
     //move toward the center
     if(star[i].location.x < width/2) p.x *= -1;
@@ -85,15 +96,17 @@ void draw() {
     xoff3 += random(0,.1);
     yoff3 += random(0,.1);
     
-    b = new eTriangle(0, 0, -140, 0, o, true);
-    b.squiggleTriangle(30, xoff2, yoff2, color(255,255,92), 2);
     
-    b1 = new eTriangle(0, 0, -140, 0, o, true);
-    b1.squiggleTriangle(30, xoff, yoff, color(118,250,239), 2);
-    
-    b2 = new eTriangle(0, 0, -140, 0, o, true);
-    b2.squiggleTriangle(30, xoff3, yoff3, color(255), 2);
-    
+
+      b = new eTriangle(0, 0, -140, 0, o, true);
+      b.squiggleTriangle(30, xoff2, yoff2, color(255,255,92), 2);
+      
+      b1 = new eTriangle(0, 0, -140, 0, o, true);
+      b1.squiggleTriangle(30, xoff, yoff, color(118,250,239), 2);
+      
+      b2 = new eTriangle(0, 0, -140, 0, o, true);
+      b2.squiggleTriangle(30, xoff3, yoff3, color(255), 2);
+      
 
     
     
@@ -120,15 +133,29 @@ void draw() {
   */
   
   //central triangles
-  t = new eTriangle(0, 0, -90, a, 0, false);
-  t.display();
   
-  s = new eTriangle(0, 0, -65, color(212,106,210, 50), 0, false);
-  s.display();
+  pushMatrix();
+  //  rotate(radians(mR));
+    t = new eTriangle(0, 0, -90, a, 0, false);
+    t.display();
+    
+    s = new eTriangle(0, 0, -65, color(212,106,210, 50), 0, false);
+    s.display();
+  popMatrix();
   
+}
+
+void oscEvent(OscMessage incomingMessage){
+  if(incomingMessage.checkAddrPattern("/scale")){
+    mS = incomingMessage.get(0).floatValue();
+  }
   
- 
+  if(incomingMessage.checkAddrPattern("/rotate")){
+    mR = incomingMessage.get(0).floatValue();
+  }
   
-  
+  if(incomingMessage.checkAddrPattern("/gravity")){
+    mG = incomingMessage.get(0).floatValue();
+  }
   
 }
